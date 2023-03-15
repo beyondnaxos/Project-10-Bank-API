@@ -22,6 +22,7 @@ module.exports.loginUser = async (req, res) => {
 
   try {
     const responseFromService = await userService.loginUser(req.body)
+    console.log(responseFromService);
     response.status = 200
     response.message = 'User successfully logged in'
     response.body = responseFromService
