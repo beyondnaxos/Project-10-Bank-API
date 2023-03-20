@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  title: Bank Argent API documentation
+  title: Bank Argent API documentation 
   description: Contains all available API endpoints in this codebase
   version: '1.0.0'
   termsOfService: 'http://swagger.io/terms/'
@@ -67,6 +67,7 @@ paths:
       description: API for fetching a user profile
       parameters:
         - in: header
+          type: string
           name: Authorization
           description: Attach Bearer JWT token
           required: true
@@ -110,6 +111,174 @@ paths:
           description: Invalid Fields
         '500':
           description: Internal Server Error
+  /account:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: User Accounts API
+      description: Get all accounts
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Accounts fetched successully
+          schema:
+            $ref: '#/definitions/Accounts'
+        '400':
+          description: Invalid adress
+        '500':
+          description: Internal Server Error
+  /account/:accountnumber/transactions:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: User Transactions API
+      description: get all transactions
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+        - in: body
+          name: body
+          description: Update transaction category attribute
+          required: true
+          schema:
+            $ref: '#/definitions/AccountNumber'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction fetched successully
+          schema:
+            $ref: '#/definitions/Transaction'
+        '400':
+          description: Invalid adress
+        '500':
+          description: Internal Server Error
+  /account/:accountnumber/transactions/:month:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: User Transactions Sorting API
+      description: get all transactions from a specific month
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+        - in: body
+          name: body
+          description: Update transaction category attribute
+          required: true
+          schema:
+            $ref: '#/definitions/AccountNumber'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Month transactions fetched successully
+          schema:
+            $ref: '#/definitions/Transaction'
+        '400':
+          description: Invalid adress
+        '500':
+          description: Internal Server Error
+  /account/transactions/:id/category:
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: Category Transactions API
+      description: API for editing category in transaction
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+        - in: body
+          name: body
+          description: Update transaction category attribute
+          required: true
+          schema:
+            $ref: '#/definitions/TransactionCategory'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction category edited successully
+          schema:
+            $ref: '#/definitions/ApiUpdateResponse'
+        '400':
+          description: Invalid Category
+        '500':
+          description: Internal Server Error
+  /account/transactions/:id/note:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: Note Transactions API
+      description: API for adding note in transaction
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+        - in: body
+          name: body
+          description: Update transaction note 
+          required: true
+          schema:
+            $ref: '#/definitions/TransactionNote'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction note added successully
+          schema:
+            $ref: '#/definitions/ApiUpdateResponse'
+        '400':
+          description: Invalid Note
+        '500':
+          description: Internal Server Error
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: Delete Note Transactions API
+      description: API for deleting note in transaction
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction note deleted successully
+          schema:
+            $ref: '#/definitions/ApiUpdateResponse'
+        '400':
+          description: Invalid Note
+        '500':
+          description: Internal Server Error
+  
 securityDefinitions:
   Bearer:
     type: apiKey
@@ -152,6 +321,22 @@ definitions:
             type: string
           email:
             type: string
+  ApiUpdateResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: object
+        properties:
+          id:
+            type: string
+          category:
+            type: string
+          note:
+            type: string
   LoginResponse:
     type: object
     properties:
@@ -164,5 +349,62 @@ definitions:
         type: string
       lastName:
         type: string
-
-
+  Accounts:
+    type: array
+    items:
+      properties:
+        id:
+          type: number
+          description: id of user
+        accountNumber: 
+          type: number
+          description: id of account  
+        accountName:
+          type: string
+          description: accounts names
+        balance:
+          type: number
+          description: balance on account
+  Transaction:
+    type: array
+    items:
+      properties:
+        id:
+          type: number
+          description: id of transaction
+        date:
+          type: string
+          description: date of transaction
+        title:
+          type: string
+          description: title of transaction
+        amount:
+          type: number
+          description: amount of transaction
+        description:
+          type: string
+          description: description of transaction
+        transactionType: 
+          type: string
+          description: payment method of transaction
+        category:
+          type: string
+          description: category of transaction
+        note:
+          type: string
+          description: note of transaction        
+  TransactionCategory:
+    type: object
+    properties:
+      category:
+        type: string
+  TransactionNote:
+    type: object
+    properties:
+      note:
+        type: string
+  AccountNumber:
+    type: object
+    properties:
+      accountNumber:
+        type: number
