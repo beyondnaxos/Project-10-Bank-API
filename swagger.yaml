@@ -148,12 +148,6 @@ paths:
           name: Authorization
           description: Attach Bearer JWT token
           required: true
-        - in: body
-          name: body
-          description: Update transaction category attribute
-          required: true
-          schema:
-            $ref: '#/definitions/AccountNumber'
       produces:
         - application/json
       responses:
@@ -178,12 +172,6 @@ paths:
           name: Authorization
           description: Attach Bearer JWT token
           required: true
-        - in: body
-          name: body
-          description: Update transaction category attribute
-          required: true
-          schema:
-            $ref: '#/definitions/AccountNumber'
       produces:
         - application/json
       responses:
@@ -195,7 +183,7 @@ paths:
           description: Invalid adress
         '500':
           description: Internal Server Error
-  /account/transactions/:id/category:
+  /account/:accountnumber/transactions/:id/category:
     put:
       security:
         - Bearer: []
@@ -225,7 +213,7 @@ paths:
           description: Invalid Category
         '500':
           description: Internal Server Error
-  /account/transactions/:id/note:
+  /account/:accountnumber/transactions/:id/note:
     post:
       security:
         - Bearer: []
